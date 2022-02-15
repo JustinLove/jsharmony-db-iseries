@@ -140,25 +140,28 @@ describe('Basic',function(){
   });
   it('Application Error', function (done) {
     //Connect to database and get data
-    db.Scalar('',"do $$ BEGIN RAISE EXCEPTION  'Application Error - Test Error'; end$$;",[],{},function(err,rslt){
+    db.Scalar('',"BEGIN SIGNAL SQLSTATE VALUE 'JHERR' SET MESSAGE_TEXT = 'Application Error - Test Error'\\; END",[],{},function(err,rslt){
       assert(err,'Exception raised');
-      assert(err.message=='Application Error - Test Error','Application Error raised');
+      assert.equal(err.message,'Application Error - Test Error','Application Error raised');
       return done();
     });
   });
-  it('Application Warning', function (done) {
+  it.skip('Application Warning', function (done) {
     //Connect to database and get data
-    db.Scalar('',"do $$ BEGIN RAISE WARNING 'Test warning'; end$$;",[],{},function(err,rslt,stats){
+    db.Scalar('',"BEGIN SIGNAL SQLSTATE VALUE '01JHW' SET MESSAGE_TEXT = 'Test Warning'\\; END",[],{},function(err,rslt,stats){
+      console.log(arguments);
       assert(!err, 'Success');
+      assert(stats, 'Stats generated');
       assert(stats.warnings && stats.warnings.length,'Warning generated');
       assert(stats.notices && !stats.notices.length,'No notice generated');
-      assert((stats.warnings[0].message=='Test warning') && (stats.warnings[0].severity=='WARNING'),'Warning valid');
+      assert.equal(stats.warnings[0].message, 'Test warning', 'Message correct')
+      assert.equal(stats.warnings[0].severity, 'WARNING','Severity valid');
       return done();
     });
   });
-  it('Application Notice', function (done) {
+  it.skip('Application Notice', function (done) {
     //Connect to database and get data
-    db.Scalar('',"do $$ BEGIN RAISE NOTICE 'Test notice'; end$$;",[],{},function(err,rslt,stats){
+    db.Scalar('',"BEGIN SIGNAL SQLSTATE VALUE '01JHN' SET MESSAGE_TEXT = 'Test Notice'\\; END",[],{},function(err,rslt,stats){
       assert(!err, 'Success');
       assert(stats.notices && stats.notices.length,'Notice generated');
       assert(stats.notices && !stats.warnings.length,'No warnings generated');
@@ -168,7 +171,7 @@ describe('Basic',function(){
   });
   it('Context', function (done) {
     //Connect to database and get data
-    db.Scalar('CONTEXT',"select current_setting('sessionvars.appuser');",[],{},function(err,rslt){
+    db.Scalar('CONTEXT',"select context from session.jsharmony_meta",[],{},function(err,rslt){
       assert(rslt && (rslt.toString().substr(0,7)=='CONTEXT'),'Context found');
       return done();
     });
@@ -183,11 +186,11 @@ describe('Basic',function(){
         db.Recordset('','select * from temp_c',[],{},dbtrans,function(err,rslt){ assert(rslt && (rslt.length==4),'Row count correct'); callback(err, rslt); });
       },
       task3: function(dbtrans, callback, transtbl){
-        db.Recordset('',"do $$ BEGIN RAISE EXCEPTION  'Application Error - Test Error'; end$$;",[],{},dbtrans,function(err,rslt){ callback(err, rslt); });
+        db.Recordset('',"BEGIN SIGNAL SQLSTATE VALUE 'JHERR' SET MESSAGE_TEXT = 'Application Error - Test Error'\\; END",[],{},dbtrans,function(err,rslt){ callback(err, rslt); });
       },
     },function(err,rslt){
       assert(err,'Rollback generated an error');
-      assert(err.message=='Application Error - Test Error','Application Error raised');
+      assert.equal(err.message, 'Application Error - Test Error','Application Error raised');
       return done();
     });
   });
