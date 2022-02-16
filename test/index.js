@@ -105,6 +105,8 @@ describe('Basic',function(){
   });
   it('Getting an id from an insert', function (done) {
     //Connect to database and get data
+    // https://www.ibm.com/docs/en/i/7.1?topic=clause-table-reference
+    //"If the target of the SQL data change statement is a view that is defined with an INSTEAD OF INSERT trigger, an error is returned."
     db.Scalar('','select c_id as "c_id" from final table (\
                     insert into temp_c(c_id) values (4)\
                   );',[],{},function(err,rslt){
