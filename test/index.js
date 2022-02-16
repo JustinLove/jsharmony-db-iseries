@@ -153,7 +153,7 @@ describe('Basic',function(){
       assert(stats, 'Stats generated');
       assert(stats.warnings && stats.warnings.length,'Warning generated');
       assert(stats.notices && !stats.notices.length,'No notice generated');
-      assert.equal(stats.warnings[0].message, 'Test warning', 'Message correct')
+      assert.equal(stats.warnings[0].message, 'Test warning', 'Message correct');
       assert.equal(stats.warnings[0].severity, 'WARNING','Severity valid');
       return done();
     });

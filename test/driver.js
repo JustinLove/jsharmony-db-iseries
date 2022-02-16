@@ -29,7 +29,7 @@ var driver = new JSHiseries();
 driver.platform.Config.debug_params.db_error_sql_state = true;
 driver.platform.Config.debug_params.db_raw_sql = true;
 
-dbconfig = _.extend({_driver: driver, connectionString: "DSN=ODBC;Uid=DBUSER;pwd=DBPASS", initialSize: 1, options: {pooled: true} }, initialdbconfig);
+var dbconfig = _.extend({_driver: driver, connectionString: "DSN=ODBC;Uid=DBUSER;pwd=DBPASS", initialSize: 1, options: {pooled: true} }, initialdbconfig);
 
 describe('Driver',function(){
   this.timeout(9000);
@@ -53,7 +53,7 @@ describe('Driver',function(){
   });
 
   it.skip('ExecSession: unpooled', function(done) {
-    config = _.extend({_driver: driver, connectionString: "DSN=ODBC;Uid=DBUSER;pwd=DBPASS", initialSize: 1 }, initialdbconfig);
+    var config = _.extend({_driver: driver, connectionString: "DSN=ODBC;Uid=DBUSER;pwd=DBPASS", initialSize: 1 }, initialdbconfig);
     driver.ExecSession(null, config, function(err, con, preStatements, conComplete) {
       assert.ifError(err);
       assert.ok(con, "got a connection");
@@ -92,7 +92,7 @@ describe('Driver',function(){
       assert.equal(driver.getDBParam(types.VarChar(1), 'hi'), "'h'");
       assert.equal(driver.getDBParam(types.VarChar(types.MAX), 'hi'), "'hi'");
       assert.equal(driver.getDBParam(types.VarChar(), ''), "''");
-      assert.equal(driver.getDBParam(types.VarChar(), 'don\'t'), "'don\'\'t'");
+      assert.equal(driver.getDBParam(types.VarChar(), 'don\'t'), "'don''t'");
       assert.equal(driver.getDBParam(types.Char(10), 'hi'), "'hi'");
     });
     it('VarBinary', function() {
@@ -174,7 +174,7 @@ describe('Driver',function(){
   it('getContextStatements', function() {
     var context = driver.getContextStatements('S1');
     assert(context.length > 0);
-    assert(_.some(context, function(statement) {return statement.match('S1')}));
+    assert(_.some(context, function(statement) {return statement.match('S1');}));
   });
 
   describe('splitSQL', function() {
