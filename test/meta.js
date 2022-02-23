@@ -27,7 +27,7 @@ var initialdbconfig = require('./dbconfig');
 
 var driver = new JSHiseries();
 
-var dbconfig = _.extend({_driver: driver, connectionString: "DSN=ODBC;Uid=DBUSER;pwd=DBPASS", initialSize: 1, options: {pooled: true} }, initialdbconfig);
+var dbconfig = _.extend({_driver: driver, connectionString: "DSN=ODBC;Uid=DBUSER;pwd=DBPASS", initialSize: 1, options: {pooled: true, meta_include: ['JSHARMONY1.%']} }, initialdbconfig);
 
 var db = new JSHdb(dbconfig);
 driver.platform.Config.debug_params.db_error_sql_state = true;
@@ -38,6 +38,18 @@ describe('Meta',function(){
 
   after(function(done){
     driver.Close(done);
+  });
+
+  it('metaInclude', function() {
+    assert.equal(db.meta.metaInclude('TABLE_SCHEMA', 'TABLE_NAME', ['jsharmony1.%', 'jsharmony1.alltypes']), "((TABLE_SCHEMA = 'JSHARMONY1' AND TABLE_NAME = 'ALLTYPES') OR TABLE_SCHEMA IN ('JSHARMONY1'))");
+  });
+
+  it('metaIncludejoin - filtered', function() {
+    assert.equal(db.meta.metaIncludeJoin('T.TABLE_SCHEMA', 'T.TABLE_NAME', ['jsharmony1.%', 'jsharmony1.alltypes']), "");
+  });
+
+  it('metaIncludejoin - blank', function() {
+    assert.equal(db.meta.metaIncludeJoin('T.TABLE_SCHEMA', 'T.TABLE_NAME', null), " INNER JOIN QSYS2.TABLES I ON (T.TABLE_SCHEMA = I.TABLE_SCHEMA AND T.TABLE_NAME = I.TABLE_NAME) ");
   });
 
   it('getTables - all', function (done) {
