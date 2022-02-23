@@ -27,5 +27,6 @@ This library uses the NPM odbc library.  Use any of the connection settings avai
 
 https://troels.arvin.dk/db/rdbms/
 https://www.ibm.com/docs/en/i/7.2?topic=reference-sql
+https://developer.ibm.com/articles/dm-0506chong/
 http://www.tylogix.com/Articles/iSeries_SQL_Programming_Youve_Got_The_Power.pdf
 https://www.npmjs.com/package/odbc
