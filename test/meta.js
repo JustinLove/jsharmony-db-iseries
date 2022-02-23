@@ -72,7 +72,7 @@ describe('Meta',function(){
 
   it('getTableFields', function (done) {
     db.meta.getTableFields({schema: 'jsharmony1', name: 'alltypes'}, function(err, messages, fields) {
-      //console.log(arguments);
+      console.log(fields);
       assert(!err, "Success");
       assert.notEqual(fields.length, 0, "got results");
       done();
