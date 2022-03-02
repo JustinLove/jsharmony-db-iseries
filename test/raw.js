@@ -25,6 +25,7 @@ async.waterfall([
       return cb();
     });
   },
+  /*
   function(cb){
     console.log("attempting global variable");
     con.query("create or replace variable foo int default 0", function(err, rslt){
@@ -62,15 +63,20 @@ async.waterfall([
       return cb();
     });
   },
+  
   function(cb){
     console.log("attempting multiple statement");
-    con.query("BEGIN create or replace variable bar int default 1; select FOO into bar from SYSIBM.SYSDUMMY1; end", function(err, rslt){
+    con.query("BEGIN\
+      DECLARE BAR INT DEFAULT 1;\
+      select FOO into bar from SYSIBM.SYSDUMMY1;\
+    END", function(err, rslt){
       if(err) return cb(err);
       var allRows = rslt || [];
       console.log(allRows);
       return cb();
     });
   },
+  
   function(cb){
     console.log("attempting version retreival");
     // wrap puts a database version string around it
@@ -135,6 +141,20 @@ async.waterfall([
       return cb();
     });
   },
+*/
+/*
+  function(cb){
+    console.log("attempting if");
+    con.query("BEGIN\
+    IF 1 = 1\
+      THEN SIGNAL SQLSTATE VALUE 'JHERR' SET MESSAGE_TEXT = \'Application Error - Test Error';\
+    END IF ;\
+  END", function(err, rslt){
+      console.log(err, rslt);
+      if(err) return cb(err);
+      return cb();
+    });
+  },*/
 
   //Close Database Connection
   function(cb){

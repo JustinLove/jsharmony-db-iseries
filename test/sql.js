@@ -28,7 +28,7 @@ dbconfig = _.extend({_driver: new JSHiseriessql(), connectionString: "DSN=ODBC;U
 
 var db = new JSHdb(dbconfig);
 dbconfig._driver.platform.Config.debug_params.db_error_sql_state = true;
-dbconfig._driver.platform.Config.debug_params.db_raw_sql = true;
+//dbconfig._driver.platform.Config.debug_params.db_raw_sql = true;
 
 describe('iseries Forms',function(){
   this.timeout(9000);
