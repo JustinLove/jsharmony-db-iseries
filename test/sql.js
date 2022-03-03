@@ -33,5 +33,5 @@ dbconfig._driver.platform.Config.debug_params.db_error_sql_state = true;
 describe('iseries Forms',function(){
   this.timeout(15000);
 
-  shouldGenerateFormSql(db, JSHdb, 'integer as identity');
+  shouldGenerateFormSql(db, JSHdb, 'INTEGER AS IDENTITY', 'TIMESTAMP');
 });
