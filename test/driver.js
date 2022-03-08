@@ -171,10 +171,27 @@ describe('Driver',function(){
     }, done);
   });
 
-  it('getContextStatements', function() {
-    var context = driver.getContextStatements('S1');
-    assert(context.length > 0);
-    assert(_.some(context, function(statement) {return statement.match('S1');}));
+  describe('getContextStatements', function() {
+    it('with context', function() {
+      var context = driver.getContextStatements('S1', {});
+      assert(context.length > 0);
+      assert(_.some(context, function(statement) {return statement.match('S1');}));
+    });
+
+    it('without context', function() {
+      var context = driver.getContextStatements('', {});
+      assert(context.length == 0);
+    });
+
+    it('meta once', function() {
+      var con = {};
+      var context1 = driver.getContextStatements('S1', con);
+      var context2 = driver.getContextStatements('S1', con);
+      assert.equal(context1.length, 2);
+      assert.equal(context2.length, 1);
+      assert(_.some(context1, function(statement) {return statement.match('S1');}));
+      assert(_.some(context2, function(statement) {return statement.match('S1');}));
+    });
   });
 
   describe('splitSQL', function() {
