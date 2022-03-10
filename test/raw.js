@@ -15,7 +15,7 @@ async.waterfall([
       return cb();
     });
   },
-
+/*
   function(cb){
     console.log("attempting schema");
     con.query("set schema=JSHARMONY1", function(err, rslt){
@@ -24,7 +24,7 @@ async.waterfall([
       console.log(allRows.length+' found');
       return cb();
     });
-  },
+  },*/
   /*
   function(cb){
     console.log("attempting global variable");
@@ -121,18 +121,18 @@ async.waterfall([
       return cb();
     });
   },
-
+*/
   //Perform SELECT
   function(cb){
     console.log("attempting select");
-    con.query("SELECT id, name FROM rawtest", function(err, rslt){
+    con.query("SELECT id, name FROM jsharmony1.rawtest", function(err, rslt){
       if(err) return cb(err);
       var allRows = rslt || [];
       console.log(allRows.length+' found');
       return cb();
     });
   },
- 
+ /*
   //Perform DELETE
   function(cb){
     console.log("attempting delete");
