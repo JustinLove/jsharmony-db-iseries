@@ -28,7 +28,7 @@ var initialdbconfig = require('./dbconfig');
 var driver = new JSHiseries();
 driver.platform.Config.debug_params.db_error_sql_state = true;
 driver.platform.Config.debug_params.db_raw_sql = true;
-//driver.platform.Config.debug_params.db_perf_reporting = true;
+driver.platform.Config.debug_params.db_perf_reporting = true;
 
 var dbconfig = _.extend({_driver: driver, connectionString: "DSN=ODBC;Uid=DBUSER;pwd=DBPASS", initialSize: 1, options: {pooled: true} }, initialdbconfig);
 
@@ -143,7 +143,7 @@ describe('Driver',function(){
     assert.equal(driver.applySQLParams("select @one, @two", [types.VarChar(), types.DateTime()], {one: 'one', two: "2022-01-27 01:02:03"}), "select 'one', TIMESTAMP('2022-01-27 01:02:03.000')");
   });
 
-  it('ExecStatement', function(done) {
+  it('ExecStatement - select', function(done) {
     driver.ExecSession(null, dbconfig, function(err, con, presql, conComplete) {
       assert.ifError(err);
       driver.ExecStatement(con, "SELECT 1 AS ONE FROM SYSIBM.SYSDUMMY1", function(err, result) {
@@ -151,6 +151,18 @@ describe('Driver',function(){
         assert.equal(result.length, 1);
         assert.equal(result.count, 1);
         assert.equal(result[0].ONE, 1);
+        conComplete(err, 'result');
+      });
+    }, done);
+  });
+
+  it('ExecStatement - other', function(done) {
+    driver.ExecSession(null, dbconfig, function(err, con, presql, conComplete) {
+      assert.ifError(err);
+      driver.ExecStatement(con, "DECLARE GLOBAL TEMPORARY TABLE SESSION.JSHARMONY_META AS (SELECT 'USystem' CONTEXT FROM SYSIBM.SYSDUMMY1) WITH DATA WITH REPLACE", function(err, result) {
+        assert.ifError(err);
+        assert.equal(result.length, 1, 'length'); // driver supplied default count
+        assert.equal(result.count, 1, 'count');
         conComplete(err, 'result');
       });
     }, done);
