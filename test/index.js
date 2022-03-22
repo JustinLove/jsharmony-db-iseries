@@ -43,9 +43,9 @@ describe('Basic',function(){
   });
   after(function(done){
     assert(db.dbconfig._driver.pools.length==1,'Pool exists');
-    assert(db.dbconfig._driver.pools[0].pool,'Pool connected');
+    assert(db.dbconfig._driver.pools[0].poolPromise,'Pool connected');
     db.Close(function(){
-      assert(!db.dbconfig._driver.pools[0].pool,'Pool closed');
+      assert(!db.dbconfig._driver.pools[0].poolPromise,'Pool closed');
       return done();
     });
   });

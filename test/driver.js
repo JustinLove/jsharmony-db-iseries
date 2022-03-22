@@ -148,8 +148,8 @@ describe('Driver',function(){
       assert.ifError(err);
       driver.ExecStatement(con, "SELECT 1 AS ONE FROM SYSIBM.SYSDUMMY1", function(err, result) {
         assert.ifError(err);
+        assert(result, 'result is not null');
         assert.equal(result.length, 1);
-        assert.equal(result.count, 1);
         assert.equal(result[0].ONE, 1);
         conComplete(err, 'result');
       });
@@ -161,23 +161,33 @@ describe('Driver',function(){
       assert.ifError(err);
       driver.ExecStatement(con, "DECLARE GLOBAL TEMPORARY TABLE SESSION.JSHARMONY_META AS (SELECT 'USystem' CONTEXT FROM SYSIBM.SYSDUMMY1) WITH DATA WITH REPLACE", function(err, result) {
         assert.ifError(err);
-        assert.equal(result.length, 1, 'length'); // driver supplied default count
-        assert.equal(result.count, 1, 'count');
+        assert.equal(result, null);
         conComplete(err, 'result');
       });
     }, done);
   });
 
-  it('ExecStatements', function(done) {
+  it('ExecStatements - select', function(done) {
     driver.ExecSession(null, dbconfig, function(err, con, presql, conComplete) {
       assert.ifError(err);
       driver.ExecStatements(con, ["SELECT 1 AS ONE  FROM SYSIBM.SYSDUMMY1", "SELECT 2 AS TWO  FROM SYSIBM.SYSDUMMY1"], function(err, results) {
         assert.ifError(err);
         assert.equal(results.length, 2);
-        assert.equal(results[0].count, 1);
         assert.equal(results[0][0].ONE, 1);
-        assert.equal(results[1].count, 1);
         assert.equal(results[1][0].TWO, 2);
+        conComplete(err, 'result');
+      });
+    }, done);
+  });
+
+  it('ExecStatements - other and select', function(done) {
+    driver.ExecSession(null, dbconfig, function(err, con, presql, conComplete) {
+      assert.ifError(err);
+      driver.ExecStatements(con, ["DECLARE GLOBAL TEMPORARY TABLE SESSION.JSHARMONY_META AS (SELECT 'USystem' CONTEXT FROM SYSIBM.SYSDUMMY1) WITH DATA WITH REPLACE", "SELECT 1 AS ONE  FROM SYSIBM.SYSDUMMY1"], function(err, results) {
+        console.log(results);
+        assert.ifError(err);
+        assert.equal(results.length, 1);
+        assert.equal(results[0][0].ONE, 1);
         conComplete(err, 'result');
       });
     }, done);
