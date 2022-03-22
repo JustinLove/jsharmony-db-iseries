@@ -28,7 +28,7 @@ var initialdbconfig = require('./dbconfig');
 var driver = new JSHiseries();
 driver.platform.Config.debug_params.db_error_sql_state = true;
 driver.platform.Config.debug_params.db_raw_sql = true;
-driver.platform.Config.debug_params.db_perf_reporting = true;
+//driver.platform.Config.debug_params.db_perf_reporting = true;
 
 var dbconfig = _.extend({_driver: driver, connectionString: "DSN=ODBC;Uid=DBUSER;pwd=DBPASS", initialSize: 1, options: {pooled: true} }, initialdbconfig);
 
@@ -114,8 +114,8 @@ describe('Driver',function(){
       assert.equal(driver.getDBParam(types.Boolean, null), "NULL");
     });
     it('Decimal', function() {
-      assert.equal(driver.getDBParam(types.Decimal(15, 0), 0), "DECIMAL(0,15,0)");
-      assert.equal(driver.getDBParam(types.Decimal(10, 10), 3.14), "DECIMAL(3.14,10,10)");
+      assert.equal(driver.getDBParam(types.Decimal(15, 0), 0), "0");
+      assert.equal(driver.getDBParam(types.Decimal(10, 10), 3.14), "3.14");
     });
     it('Float', function() {
       assert.equal(driver.getDBParam(types.Float(15), 0), "0");
