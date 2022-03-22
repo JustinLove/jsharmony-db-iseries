@@ -47,6 +47,29 @@ describe('Driver',function(){
     }, "prefix", "some code");
   });
 
+  it('ExecError prefix stripping', function (done) {
+    driver.ExecError({
+      odbcErrors: [
+        {
+          state: 'HY000',
+          code: -104,
+          message: '[IBM][System i Access ODBC Driver][DB2 for i5/OS]SQL0104 - Token <END-OF-STATEMENT> was not valid. Valid tokens: + - AS <IDENTIFIER>.'
+        },
+        {
+          state: 'HY000',
+          code: 69898,
+          message: '[IBM][System i Access ODBC Driver][DB2 for i5/OS]PWS0005 - Error occurred in the database host server code.'
+        }
+      ]
+    }, function(err, value) {
+      console.log(err);
+      assert.ok(err.message.match('Token'), "has message");
+      assert.ok(!err.message.match('host server code'), "does not have generic error");
+      assert.ok(!err.message.match('System i'), "Does not have prefix");
+      done();
+    }, "prefix", "some code");
+  });
+
   it('logRawSQL', function () {
     var before = driver.platform.Config.debug_params.db_raw_sql;
     driver.platform.Config.debug_params.db_raw_sql = true;
