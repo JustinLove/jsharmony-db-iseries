@@ -19,7 +19,6 @@ along with this package.  If not, see <http://www.gnu.org/licenses/>.
 
 var JSHiseries = require('../index');
 var JSHdb = require('jsharmony-db');
-var types = JSHdb.types;
 var assert = require('assert');
 var _ = require('lodash');
 //var moment = require('moment');

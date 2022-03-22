@@ -15,7 +15,7 @@ async.waterfall([
       return cb();
     });
   },
-/*
+  /*
   function(cb){
     console.log("attempting schema");
     con.query("set schema=JSHARMONY1", function(err, rslt){
@@ -132,7 +132,7 @@ async.waterfall([
       return cb();
     });
   },
- /*
+  /*
   //Perform DELETE
   function(cb){
     console.log("attempting delete");
@@ -142,7 +142,7 @@ async.waterfall([
     });
   },
 */
-/*
+  /*
   function(cb){
     console.log("attempting if");
     con.query("BEGIN\
