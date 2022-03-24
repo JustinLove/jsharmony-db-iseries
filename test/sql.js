@@ -24,7 +24,7 @@ var _ = require('lodash');
 
 var dbconfig = require('./dbconfig');
 
-dbconfig = _.extend({_driver: new JSHiseriessql(), connectionString: "DSN=ODBC;Uid=DBUSER;pwd=DBPASS", initialSize: 1, options: {pooled: true, meta_include: ['JSHARMONY1.%']} }, dbconfig);
+dbconfig = _.extend({_driver: new JSHiseriessql(), connectionString: "DSN=ODBC;Uid=DBUSER;pwd=DBPASS", initialSize: 1, options: {pooled: true, metadata_filter: ['JSHARMONY1.%']} }, dbconfig);
 
 var db = new JSHdb(dbconfig);
 dbconfig._driver.platform.Config.debug_params.db_error_sql_state = true;

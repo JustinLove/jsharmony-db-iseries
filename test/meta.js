@@ -21,12 +21,11 @@ var JSHiseries = require('../index');
 var JSHdb = require('jsharmony-db');
 var assert = require('assert');
 var _ = require('lodash');
-//var moment = require('moment');
 var initialdbconfig = require('./dbconfig');
 
 var driver = new JSHiseries();
 
-var dbconfig = _.extend({_driver: driver, connectionString: "DSN=ODBC;Uid=DBUSER;pwd=DBPASS", initialSize: 1, options: {pooled: true, meta_include: ['JSHARMONY1.%']} }, initialdbconfig);
+var dbconfig = _.extend({_driver: driver, connectionString: "DSN=ODBC;Uid=DBUSER;pwd=DBPASS", initialSize: 1, options: {pooled: true, metadata_filter: ['JSHARMONY1.%']} }, initialdbconfig);
 
 var db = new JSHdb(dbconfig);
 driver.platform.Config.debug_params.db_error_sql_state = true;

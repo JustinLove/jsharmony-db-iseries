@@ -15,7 +15,7 @@ var JSHiseries = require('jsharmony-db-iseries');
 var JSHdb = require('jsharmony-db');
 var dbconfig = { _driver: new JSHiseries(), connectionString: "DSN=ODBC;Uid=DBUSER;pwd=DBPASS" };
 var db = new JSHdb(dbconfig);
-db.Recordset('','select * from c where c_id >= @c_id',[JSHdb.types.BigInt],{'c_id': 10},function(err,rslt){
+db.Recordset('','select * from C where C_ID >= @C_ID',[JSHdb.types.BigInt],{'C_ID': 10},function(err,rslt){
   console.log(rslt);
   done();
 });
@@ -34,22 +34,31 @@ This library uses the [NPM odbc library](https://www.npmjs.com/package/odb).  Us
   _driver: ...,
   connectionString: "...",
   options: {
-    meta_include: [],
+    metadata_filter: [],
     automatic_compound_commands: true,
   }
 }
 ```
 
-#### meta_include
+#### metadata_filter
 
-Array of strings to limit database schema introspection on application startup, which can save significant time. Currently two formats are supported:
+```
+Default: []   // No metadata will be loaded by default
+```
 
-- `"SCHEMA.TABLE"`
-- `"SCHEMA.%"`
+Array of strings to limit database schema introspection on application startup. Currently three formats are supported:
+
+- `"SCHEMA.TABLE"` - Individually specified tables
+- `"SCHEMA.%"` - All tables within SCHEMA
+- `"%.%"` - All schemas, all tables
 
 #### automatic_compound_commands
 
-If enabled, the driver will automatically wrap db.Command statements in a BEGIN...END compound statement to save network roundtrips; otherwise statements must be executed individually.
+```
+Default: true
+```
+
+If enabled, the driver will automatically wrap `db.Command` statements in a BEGIN...END compound statement to save network roundtrips; otherwise statements must be executed individually.
 
 ### Debug Parameters
 
