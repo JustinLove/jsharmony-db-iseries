@@ -38,8 +38,16 @@ describe('Meta',function(){
     driver.Close(done);
   });
 
-  it('metaInclude', function() {
+  it('metaInclude - filtered', function() {
     assert.equal(db.meta.metaInclude('TABLE_SCHEMA', 'TABLE_NAME', ['jsharmony1.%', 'jsharmony1.alltypes']), "((TABLE_SCHEMA = 'JSHARMONY1' AND TABLE_NAME = 'ALLTYPES') OR TABLE_SCHEMA IN ('JSHARMONY1'))");
+  });
+
+  it('metaInclude - all', function() {
+    assert.equal(db.meta.metaInclude('TABLE_SCHEMA', 'TABLE_NAME', ['%.%']), "(TABLE_SCHEMA NOT LIKE 'Q%' AND TABLE_NAME NOT IN ('SYSIBM', 'SYSIBMADM', 'SYSTOOLS'))");
+  });
+
+  it('metaInclude - empty', function() {
+    assert.equal(db.meta.metaInclude('TABLE_SCHEMA', 'TABLE_NAME', []), "(0=1)");
   });
 
   it('metaIncludejoin - filtered', function() {
@@ -48,6 +56,10 @@ describe('Meta',function(){
 
   it('metaIncludejoin - blank', function() {
     assert.equal(db.meta.metaIncludeJoin('T.TABLE_SCHEMA', 'T.TABLE_NAME', null), " INNER JOIN QSYS2.TABLES I ON (T.TABLE_SCHEMA = I.TABLE_SCHEMA AND T.TABLE_NAME = I.TABLE_NAME) ");
+  });
+
+  it('metaIncludejoin - empty', function() {
+    assert.equal(db.meta.metaIncludeJoin('T.TABLE_SCHEMA', 'T.TABLE_NAME', []), " INNER JOIN QSYS2.TABLES I ON (T.TABLE_SCHEMA = I.TABLE_SCHEMA AND T.TABLE_NAME = I.TABLE_NAME) ");
   });
 
   it('getTables - all', function (done) {
